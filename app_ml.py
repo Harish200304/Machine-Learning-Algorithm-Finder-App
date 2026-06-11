@@ -6,8 +6,17 @@ from dataclasses import dataclass
 import numpy as np
 import pandas as pd
 import streamlit as st
-import xgboost as xgb
-import lightgbm as lgb
+
+try:
+    import xgboost as xgb
+except ImportError:
+    xgb = None
+
+try:
+    import lightgbm as lgb
+except ImportError:
+    lgb = None
+
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import (
     RandomForestClassifier,
@@ -144,16 +153,22 @@ def build_preprocessor(X: pd.DataFrame) -> ColumnTransformer:
 
 
 def classification_models(random_state: int) -> list[tuple[str, object]]:
-    return [
+    models: list[tuple[str, object]] = [
         ("Logistic Regression", LogisticRegression(max_iter=2000)),
         ("Decision Tree Classifier", DecisionTreeClassifier(random_state=random_state)),
         ("Random Forest Classifier", RandomForestClassifier(n_estimators=150, random_state=random_state)),
         ("K-Nearest Neighbors Classifier", KNeighborsClassifier()),
         ("Support Vector Classifier", SVC()),
         ("Gradient Boosting Classifier", GradientBoostingClassifier(random_state=random_state)),
-        ("XGBoost Classifier", xgb.XGBClassifier(random_state=random_state, eval_metric="logloss")),
-        ("LightGBM Classifier", lgb.LGBMClassifier(random_state=random_state, verbose=-1)),
     ]
+
+    if xgb is not None:
+        models.append(("XGBoost Classifier", xgb.XGBClassifier(random_state=random_state, eval_metric="logloss")))
+
+    if lgb is not None:
+        models.append(("LightGBM Classifier", lgb.LGBMClassifier(random_state=random_state, verbose=-1)))
+
+    return models
 
 
 def regression_models(random_state: int) -> list[tuple[str, object]]:

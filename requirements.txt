@@ -4,3 +4,5 @@ streamlit
 scikit-learn
 openpyxl
 xlrd
+xgboost
+lightgbm
