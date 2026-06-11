@@ -27,7 +27,7 @@ from sklearn.linear_model import LinearRegression, LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
@@ -106,11 +106,11 @@ def infer_task_type(y: pd.Series) -> str:
     return "Classification"
 
 
-def make_label_encoder() -> LabelEncoder:
-    try:
-        return LabelEncoder(handle_unknown="ignore", sparse_output=False)
-    except TypeError:
-        return LabelEncoder(handle_unknown="ignore", sparse=False)
+def make_categorical_encoder() -> OrdinalEncoder:
+    return OrdinalEncoder(
+        handle_unknown="use_encoded_value",
+        unknown_value=-1,
+    )
 
 
 def split_features_target(df: pd.DataFrame, target_column: str) -> tuple[pd.DataFrame, pd.Series]:
@@ -139,7 +139,7 @@ def build_preprocessor(X: pd.DataFrame) -> ColumnTransformer:
     categorical_pipeline = Pipeline(
         steps=[
             ("imputer", SimpleImputer(strategy="most_frequent")),
-            ("label", make_label_encoder()),
+            ("encoder", make_categorical_encoder()),
         ]
     )
 
