@@ -8,11 +8,6 @@ import pandas as pd
 import streamlit as st
 
 try:
-    import xgboost as xgb
-except ImportError:
-    xgb = None
-
-try:
     import lightgbm as lgb
 except ImportError:
     lgb = None
@@ -161,9 +156,6 @@ def classification_models(random_state: int) -> list[tuple[str, object]]:
         ("Support Vector Classifier", SVC()),
         ("Gradient Boosting Classifier", GradientBoostingClassifier(random_state=random_state)),
     ]
-
-    if xgb is not None:
-        models.append(("XGBoost Classifier", xgb.XGBClassifier(random_state=random_state, eval_metric="logloss")))
 
     if lgb is not None:
         models.append(("LightGBM Classifier", lgb.LGBMClassifier(random_state=random_state, verbose=-1)))
