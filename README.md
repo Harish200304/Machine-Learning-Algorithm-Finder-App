@@ -31,7 +31,6 @@ You can also double-click `run_app.bat` on Windows after installing the requirem
 
 Classification:
 
-- Most frequent class baseline
 - Logistic regression
 - Decision tree classifier
 - Random forest classifier
@@ -41,12 +40,6 @@ Classification:
 
 Regression:
 
-- Mean value baseline
 - Linear regression
-- Ridge regression
-- Decision tree regressor
-- Random forest regressor
-- K-nearest neighbors regressor
-- Support vector regressor
 
 Classification reports training and test accuracy. Regression reports training and test R2 score, plus mean absolute error for the recommended model.
